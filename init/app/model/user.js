@@ -45,7 +45,7 @@ module.exports = app => {
       role: {
         type: ENUM('普通用户', '管理员', '超级管理员'),
         allowNull: false,
-        default: '普通用户'
+        defaultValue: '普通用户'
       }
     },
     {

@@ -3,6 +3,26 @@
 const Controller = require('egg').Controller;
 
 class UserController extends Controller {
+  //注册
+  async register() {
+    const { ctx, app } = this;
+    //获取用户端传递过来的参数
+    const result = await ctx.service.user.register(ctx.request.body);
+
+    if (result.data !== null) {
+      ctx.body = {
+        status: 200,
+        message: '用户注册成功！'
+      };
+    } else {
+      ctx.body = {
+        status: 201,
+        message: '用户注册失败！' + result.message
+      };
+    }
+  }
+
+  //登录
   async login() {
     const { ctx, app } = this;
     //获取用户端传递过来的参数
@@ -14,7 +34,7 @@ class UserController extends Controller {
 
     if (verificationCode.toLowerCase() !== code) {
       ctx.body = {
-        status: 203,
+        status: 204,
         message: '验证码错误！'
       };
       return false;
@@ -25,14 +45,14 @@ class UserController extends Controller {
     //成功过后进行一下操作
     if (!result.isRegister) {
       ctx.body = {
-        status: 201,
+        status: 202,
         message: '用户尚未注册！'
       };
       return false;
     }
     if (result.data === null) {
       ctx.body = {
-        status: 202,
+        status: 203,
         message: '密码错误!'
       };
       return false;

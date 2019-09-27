@@ -3,20 +3,37 @@
 const Service = require('egg').Service;
 const Op = require('sequelize').Op;
 class UserService extends Service {
-  // async register(user) {
-  //   const { ctx } = this;
-  //   const result = await ctx.model.User.findAll({
-  //     attributes: { exclude: ['password'] },
-  //     where: {
-  //       username,
-  //       password
-  //     }
-  //   });
-  //   return {
-  //     data: result
-  //   };
-  // }
+  //注册
+  async register(user) {
+    const { ctx } = this;
+    const { username, password, realName, phone, idCard, email } = user;
+    const hashPassword = await ctx.genHash(password);
+    try {
+      const result = await ctx.model.User.create({
+        attributes: { exclude: ['password'] },
+        where: {
+          username,
+          password: hashPassword,
+          realName,
+          phone,
+          idCard,
+          email,
+          competence: '1'
+        }
+      });
+      return {
+        data: result
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        data: null,
+        message: e
+      };
+    }
+  }
 
+  //登录
   async login(username, password) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({

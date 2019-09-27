@@ -10,4 +10,5 @@ module.exports = app => {
   router.get('/api/book/findSimple', controller.book.findSimpleByKeywords);
   router.get('/api/book/getInfo', controller.book.getInfo);
   router.post('/api/user/login', controller.user.login);
+  router.post('/api/user/register', controller.user.register);
 };

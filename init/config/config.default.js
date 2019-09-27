@@ -49,7 +49,7 @@ module.exports = appInfo => {
   config.jwt = {
     enable: true,
     secret: 'secretKey',
-    ignore: ['/api/user/login', '/api/verify']
+    ignore: ['/api/user/login', '/api/verify', '/api/user/register']
   };
 
   config.bcrypt = {
