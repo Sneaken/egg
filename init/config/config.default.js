@@ -51,6 +51,7 @@ module.exports = appInfo => {
     secret: 'secretKey',
     ignore: ['/api/user/login', '/api/verify']
   };
+
   config.bcrypt = {
     saltRounds: 10 // default 10
   };

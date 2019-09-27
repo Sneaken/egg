@@ -9,7 +9,8 @@ class UserController extends Controller {
     const { username, password, verificationCode } = ctx.request.body;
 
     const code = await ctx.service.common.getVerifyCode();
-    console.log(code, '???', verificationCode);
+    // const hashPassword = await ctx.genHash(password);
+    // console.log(hashPassword);
 
     if (verificationCode.toLowerCase() !== code) {
       ctx.body = {
@@ -36,7 +37,6 @@ class UserController extends Controller {
       };
       return false;
     }
-    // 生成 token 的方式
     // 返回 token 到前端
     ctx.body = {
       status: 200,
@@ -48,7 +48,7 @@ class UserController extends Controller {
         },
         app.config.jwt.secret,
         { expiresIn: 8 * 3600 }
-      )
+      ) // 生成 token 的方式
     };
   }
 }

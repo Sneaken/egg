@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 module.exports = app => {
-  const { STRING, INTEGER, CHAR, JSON, DATE } = app.Sequelize;
+  const { STRING, INTEGER, CHAR, JSON, DATE, ENUM } = app.Sequelize;
   return app.model.define(
     'user',
     {
@@ -41,6 +41,11 @@ module.exports = app => {
       competence: {
         type: JSON,
         allowNull: false
+      },
+      role: {
+        type: ENUM('普通用户', '管理员', '超级管理员'),
+        allowNull: false,
+        default: '普通用户'
       }
     },
     {

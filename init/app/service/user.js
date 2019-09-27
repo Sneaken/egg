@@ -1,7 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
-const OP = require('sequelize').Op;
+const Op = require('sequelize').Op;
 class UserService extends Service {
   // async register(user) {
   //   const { ctx } = this;
@@ -16,7 +16,7 @@ class UserService extends Service {
   //     data: result
   //   };
   // }
-  //
+
   async login(username, password) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({
@@ -31,16 +31,18 @@ class UserService extends Service {
         data: null
       };
     }
-    return {
-      isRegister: true,
-      data: await ctx.model.User.findOne({
-        attributes: ['username', 'competence'],
-        where: {
-          username,
-          password
-        }
-      })
-    };
+    const check = await ctx.compare(password, await ctx.genHash(password)); //密码校验
+    if (check) {
+      return {
+        isRegister: true,
+        data: isRegister
+      };
+    } else {
+      return {
+        isRegister: true,
+        data: null
+      };
+    }
   }
 }
 
