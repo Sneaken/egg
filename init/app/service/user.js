@@ -4,9 +4,8 @@ const Service = require('egg').Service;
 const Op = require('sequelize').Op;
 class UserService extends Service {
   // 注册
-  async register(user) {
+  async register({ username, password, realName, phone, idCard, email }) {
     const { ctx } = this;
-    const { username, password, realName, phone, idCard, email } = user;
     const hashPassword = await ctx.genHash(password);
     try {
       const result = await ctx.model.User.create({
@@ -68,12 +67,12 @@ class UserService extends Service {
   }
 
   // 忘记密码
-  async forgetPassword(user) {
+  async forgetPassword({ username, password }) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({
       attributes: ['username'],
       where: {
-        username: user.username
+        username
       }
     });
     if (isRegister === null) {
@@ -82,14 +81,14 @@ class UserService extends Service {
         data: null
       };
     }
-    const hashPassword = await ctx.genHash(user.password);
+    const hashPassword = await ctx.genHash(password);
     const result = await ctx.model.User.update(
       {
         password: hashPassword
       },
       {
         where: {
-          username: user.username
+          username
         }
       }
     );
@@ -97,6 +96,16 @@ class UserService extends Service {
       isRegister: true,
       data: result
     };
+  }
+
+  async getInfo({ username }) {
+    const { ctx } = this;
+    return await ctx.model.User.findOne({
+      attributes: { exclude: ['id', 'password', 'competence'] },
+      where: {
+        username
+      }
+    });
   }
 }
 

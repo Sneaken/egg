@@ -32,7 +32,7 @@ class UserController extends Controller {
     // const hashPassword = await ctx.genHash(password);
     // console.log(hashPassword);
 
-    if (verificationCode.toLowerCase() !== code) {
+    if (verificationCode && verificationCode.toLowerCase() !== code) {
       ctx.body = {
         status: 204,
         message: '验证码错误！'
@@ -95,6 +95,24 @@ class UserController extends Controller {
         message: '密码修改成功！'
       };
     }
+  }
+
+  async getUserInfo() {
+    const { ctx } = this;
+    const result = await ctx.service.user.getInfo(ctx.query);
+    console.log(result);
+    if (result === null) {
+      ctx.body = {
+        status: 207,
+        message: '暂无数据！'
+      };
+    }
+
+    ctx.body = {
+      status: 200,
+      message: '用户信息查询成功！',
+      data: result
+    };
   }
 }
 

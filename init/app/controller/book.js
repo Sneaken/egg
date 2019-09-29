@@ -17,7 +17,7 @@ class BookController extends Controller {
     const { category, keywords } = ctx.query;
     if (category === '' || keywords === '') {
       ctx.body = {
-        status: 202,
+        status: 206,
         message: '检查查询参数,不能为空！'
       };
       return false;
@@ -30,7 +30,7 @@ class BookController extends Controller {
       });
     } else {
       ctx.body = Object.assign(result, {
-        status: 201,
+        status: 207,
         message: '暂无数据！'
       });
     }
@@ -41,7 +41,7 @@ class BookController extends Controller {
     const { id } = ctx.query;
     if (id === '') {
       ctx.body = {
-        status: 202,
+        status: 206,
         message: '检查查询参数,不能为空！'
       };
       return false;
@@ -54,7 +54,7 @@ class BookController extends Controller {
       });
     } else {
       ctx.body = Object.assign(result, {
-        status: 201,
+        status: 207,
         message: '暂无数据！'
       });
     }
