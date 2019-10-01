@@ -6,19 +6,29 @@ class UserService extends Service {
   // 注册
   async register({ username, password, realName, phone, idCard, email }) {
     const { ctx } = this;
-    const hashPassword = await ctx.genHash(password);
     try {
-      const result = await ctx.model.User.create({
-        attributes: { exclude: ['password'] },
+      const isRegister = await ctx.model.User.findOne({
+        attributes: ['username'],
         where: {
-          username,
-          password: hashPassword,
-          realName,
-          phone,
-          idCard,
-          email,
-          competence: '1'
+          username
         }
+      });
+      if (isRegister !== null) {
+        return {
+          isRegister: true,
+          data: null
+        };
+      }
+      const hashPassword = await ctx.genHash(password);
+      const result = await ctx.model.User.create({
+        username,
+        password: hashPassword,
+        realName,
+        createTime: new Date(),
+        phone,
+        idCard,
+        email,
+        competence: '1'
       });
       return {
         data: result
@@ -26,8 +36,8 @@ class UserService extends Service {
     } catch (e) {
       console.log(e);
       return {
-        data: null,
-        message: e
+        message: e,
+        data: null
       };
     }
   }

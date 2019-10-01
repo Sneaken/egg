@@ -7,8 +7,14 @@ class UserController extends Controller {
   async register() {
     const { ctx, app } = this;
     //获取用户端传递过来的参数
+    console.log(ctx.request.body);
     const result = await ctx.service.user.register(ctx.request.body);
-
+    if (result.isRegister) {
+      ctx.body = {
+        status: 208,
+        message: '用户名已被注册！'
+      };
+    }
     if (result.data !== null) {
       ctx.body = {
         status: 200,
