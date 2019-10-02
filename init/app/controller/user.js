@@ -14,6 +14,7 @@ class UserController extends Controller {
         status: 208,
         message: '用户名已被注册！'
       };
+      return false;
     }
     if (result.data !== null) {
       ctx.body = {
@@ -67,14 +68,16 @@ class UserController extends Controller {
     ctx.body = {
       status: 200,
       message: '登录成功',
-      data: app.jwt.sign(
-        {
-          username: result.data.username, //需要存储的 token 数据
-          competence: result.data.competence
-        },
-        app.config.jwt.secret,
-        { expiresIn: 8 * 3600 }
-      ) // 生成 token 的方式
+      data:
+        'Bearer ' +
+        app.jwt.sign(
+          {
+            username: result.data.username, //需要存储的 token 数据
+            competence: result.data.competence
+          },
+          app.config.jwt.secret,
+          { expiresIn: 8 * 3600 }
+        ) // 生成 token 的方式
     };
   }
 

@@ -1,5 +1,5 @@
 'use strict';
-
+const sequelize = require('sequelize');
 const Service = require('egg').Service;
 const OP = require('sequelize').Op;
 class BookService extends Service {
@@ -51,6 +51,24 @@ class BookService extends Service {
         _id
       }
     });
+    return {
+      data: result
+    };
+  }
+
+  /**
+   * 获取首页图书 随机
+   * @returns {Promise<{data: *}>}
+   */
+  async findHomeBook() {
+    const { app } = this;
+    const sql =
+      'SELECT _id,title,author,image FROM book AS t1 JOIN ( SELECT ROUND( RAND( ) * ( SELECT MAX( id ) FROM book ) ) AS id ) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id ASC LIMIT 10';
+    // egg-sequelize 原始查询方法
+    const result = await app.model.query(sql, {
+      type: sequelize.QueryTypes.SELECT
+    });
+
     return {
       data: result
     };
