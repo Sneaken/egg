@@ -60,11 +60,29 @@ class BookService extends Service {
    * 获取首页图书 随机
    * @returns {Promise<{data: *}>}
    */
-  async findHomeBook() {
+  async getHomeBook() {
     const { app } = this;
     const sql =
-      'SELECT _id,title,author,image FROM book AS t1 JOIN ( SELECT ROUND( RAND( ) * ( SELECT MAX( id ) FROM book ) ) AS id ) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id ASC LIMIT 10';
+      'SELECT _id,title,summary,author,images FROM book AS t1 JOIN ( SELECT ROUND( RAND( ) * ( SELECT MAX( id ) FROM book ) ) AS id ) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id ASC LIMIT 40';
     // egg-sequelize 原始查询方法
+    const result = await app.model.query(sql, {
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    return {
+      data: result
+    };
+  }
+
+  /**
+   * 获取评分>8.5的随机10本书
+   * @returns {Promise<{data: *}>}
+   */
+  async getLeaderBoard() {
+    const { app } = this;
+    const sql =
+      'SELECT _id,title,rating,author,images,tags FROM book AS t1 JOIN ( SELECT ROUND( RAND( ) * ( SELECT MAX( id ) FROM book ) ) AS id ) AS t2 ' +
+      'WHERE t1.id >=t2.id  AND rating -> "$.average" >= \'8.5\' ORDER BY t1.id ASC LIMIT 10';
     const result = await app.model.query(sql, {
       type: sequelize.QueryTypes.SELECT
     });

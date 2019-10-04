@@ -60,9 +60,24 @@ class BookController extends Controller {
     }
   }
 
-  async findHomeBook() {
+  async getHomeBook() {
     const { ctx } = this;
-    const result = await ctx.service.book.findHomeBook();
+    const result = await ctx.service.book.getHomeBook();
+    if (result.length !== 0) {
+      ctx.body = Object.assign(result, {
+        status: 200,
+        message: '查询成功！'
+      });
+    } else {
+      ctx.body = Object.assign(result, {
+        status: 207,
+        message: '暂无数据！'
+      });
+    }
+  }
+  async getLeaderBoard() {
+    const { ctx } = this;
+    const result = await ctx.service.book.getLeaderBoard();
     if (result.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
