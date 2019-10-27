@@ -23,7 +23,7 @@ class BookController extends Controller {
       return false;
     }
     const result = await ctx.service.book.findByKeywords(category, keywords);
-    if (result.length !== 0) {
+    if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
         message: '查询成功！'
@@ -38,16 +38,16 @@ class BookController extends Controller {
 
   async getInfo() {
     const { ctx } = this;
-    const { id } = ctx.query;
-    if (id === '') {
+    const { _id } = ctx.query;
+    if (_id === '') {
       ctx.body = {
         status: 206,
         message: '检查查询参数,不能为空！'
       };
       return false;
     }
-    const result = await ctx.service.book.findOne(id);
-    if (result.length !== 0) {
+    const result = await ctx.service.book.findOne(_id);
+    if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
         message: '查询成功！'
@@ -63,7 +63,7 @@ class BookController extends Controller {
   async getHomeBook() {
     const { ctx } = this;
     const result = await ctx.service.book.getHomeBook();
-    if (result.length !== 0) {
+    if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
         message: '查询成功！'
@@ -78,7 +78,7 @@ class BookController extends Controller {
   async getLeaderBoard() {
     const { ctx } = this;
     const result = await ctx.service.book.getLeaderBoard();
-    if (result.length !== 0) {
+    if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
         message: '查询成功！'

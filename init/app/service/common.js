@@ -10,7 +10,7 @@ class CommonService extends Service {
       fontSize: 50,
       width: 90,
       height: 35,
-      background: '#F5F7FA'
+      background: '#eccc68'
     });
     this.ctx.session.code = captcha.text.toLowerCase();
     return captcha;

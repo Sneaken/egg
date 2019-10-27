@@ -62,7 +62,7 @@ class UserService extends Service {
       return {
         isRegister: true,
         data: await ctx.model.User.findOne({
-          attributes: ['username', 'competence'],
+          attributes: ['username', 'competence', 'phone', 'email'],
           where: {
             username
           }
@@ -108,6 +108,7 @@ class UserService extends Service {
     };
   }
 
+  // 获取用户个人信息
   async getInfo({ username }) {
     const { ctx } = this;
     return await ctx.model.User.findOne({
@@ -116,6 +117,75 @@ class UserService extends Service {
         username
       }
     });
+  }
+
+  // 判断用户是否存在
+  async isExists(username) {
+    const { ctx } = this;
+    const isRegister = await ctx.model.User.findOne({
+      attributes: ['username', 'password'],
+      where: {
+        username
+      }
+    });
+    return isRegister !== null;
+  }
+
+  async updateUserInfo({ username, attribute, oldValue, newValue }) {
+    const { ctx } = this;
+    const isExists = await this.isExists(username);
+    if (isExists) {
+      if (attribute !== 'password') {
+        try {
+          const result = await ctx.model.User.update(
+            {
+              [attribute]: newValue
+            },
+            {
+              where: {
+                username,
+                [attribute]: oldValue
+              }
+            }
+          );
+          return {
+            data: result
+          };
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        const check = await ctx.compare(oldValue, isExists.password); //密码校验
+        if (check) {
+          try {
+            const result = await ctx.model.User.update(
+              {
+                [attribute]: newValue
+              },
+              {
+                where: {
+                  username,
+                  [attribute]: oldValue
+                }
+              }
+            );
+            return {
+              data: result
+            };
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          return {
+            data: [0]
+          };
+        }
+      }
+    } else {
+      return {
+        data: null
+      };
+    }
   }
 }
 

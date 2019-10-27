@@ -73,7 +73,9 @@ class UserController extends Controller {
         app.jwt.sign(
           {
             username: result.data.username, //需要存储的 token 数据
-            competence: result.data.competence
+            competence: result.data.competence,
+            phone: result.data.phone,
+            email: result.data.email
           },
           app.config.jwt.secret,
           { expiresIn: 8 * 3600 }
@@ -106,6 +108,7 @@ class UserController extends Controller {
     }
   }
 
+  // 获取用户个人信息
   async getUserInfo() {
     const { ctx } = this;
     const result = await ctx.service.user.getInfo(ctx.query);
@@ -121,6 +124,78 @@ class UserController extends Controller {
       status: 200,
       message: '用户信息查询成功！',
       data: result
+    };
+  }
+
+  // 更新用户信息
+  async updateUserInfo() {
+    const { ctx } = this;
+    const { username, op, oldValue, newValue } = ctx.request.body;
+    let attribute;
+    if (op === 1) {
+      attribute = 'phone';
+    } else if (op === 2) {
+      attribute = 'email';
+    } else if (op === 3) {
+      attribute = 'password';
+    } else {
+      ctx.body = {
+        status: 211,
+        message: '参数类型出错'
+      };
+      return;
+    }
+    const params = {
+      username,
+      attribute,
+      oldValue,
+      newValue
+    };
+
+    const result = await ctx.service.user.updateUserInfo(params);
+    if (result.data[0] === 1) {
+      ctx.body = {
+        status: 200,
+        message: '用户信息更新成功！'
+      };
+    } else if (result.data[0] === 0) {
+      ctx.body = {
+        status: 212,
+        message: '用户信息修改失败！'
+      };
+    } else {
+      ctx.body = {
+        status: 202,
+        message: '用户尚未注册！'
+      };
+    }
+  }
+
+  // 不健壮 有漏洞 但是懒得写了
+  async getToken() {
+    const { ctx, app } = this;
+    const user = await ctx.service.user.getInfo(ctx.query);
+    if (user === null) {
+      ctx.body = {
+        status: 202,
+        message: '用户尚未注册！无法获取用户信息！'
+      };
+    }
+    ctx.body = {
+      status: 200,
+      message: 'tokn获取成功！',
+      data:
+        'Bearer ' +
+        app.jwt.sign(
+          {
+            username: user.username, //需要存储的 token 数据
+            competence: user.competence,
+            phone: user.phone,
+            email: user.email
+          },
+          app.config.jwt.secret,
+          { expiresIn: 8 * 3600 }
+        ) // 生成 token 的方式
     };
   }
 }

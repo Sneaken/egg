@@ -12,7 +12,10 @@ module.exports = app => {
   router.get('/api/book/getLeaderBoard', controller.book.getLeaderBoard);
   router.get('/api/book/getInfo', controller.book.getInfo);
   router.get('/api/user/getUserInfo', controller.user.getUserInfo);
+  router.get('/api/tag/create', controller.tag.createTag);
+  router.get('/api/user/getToken', controller.user.getToken);
   router.post('/api/user/login', controller.user.login);
   router.post('/api/user/register', controller.user.register);
   router.post('/api/user/forgetPassword', controller.user.forgetPassword);
+  router.post('/api/user/updateUserInfo', controller.user.updateUserInfo);
 };
