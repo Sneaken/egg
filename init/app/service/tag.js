@@ -6,28 +6,28 @@ class TagService extends Service {
     const { ctx } = this;
     try {
       const isExist = await ctx.model.Tag.findOne({
-        attributes: ['name'],
+        attributes: [ 'name' ],
         where: {
-          name
-        }
+          name,
+        },
       });
       if (isExist !== null) {
         return {
           isExist: true,
-          data: null
+          data: null,
         };
       }
       const result = await ctx.model.Tag.create({
-        name
+        name,
       });
       return {
-        data: result
+        data: result,
       };
     } catch (e) {
       console.log(e);
       return {
         message: e,
-        data: null
+        data: null,
       };
     }
   }

@@ -8,18 +8,18 @@ module.exports = {
   // }
   sequelize: {
     enable: true,
-    package: 'egg-sequelize'
+    package: 'egg-sequelize',
   },
   cors: {
     enable: true,
-    package: 'egg-cors'
+    package: 'egg-cors',
   },
   jwt: {
     enable: true,
-    package: 'egg-jwt'
+    package: 'egg-jwt',
   },
   bcrypt: {
     enable: true,
-    package: 'egg-bcrypt'
-  }
+    package: 'egg-bcrypt',
+  },
 };

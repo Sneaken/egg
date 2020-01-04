@@ -8,18 +8,18 @@ module.exports = app => {
         type: INTEGER(11),
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       name: {
         type: STRING(20),
-        allowNull: false
-      }
+        allowNull: false,
+      },
     },
     {
       timestamps: false,
       freezeTableName: true,
       underscored: false,
-      tableName: 'tag'
+      tableName: 'tag',
     }
   );
 };

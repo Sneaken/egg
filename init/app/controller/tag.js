@@ -10,19 +10,19 @@ class TagController extends Controller {
     if (result.isExist) {
       ctx.body = {
         status: 209,
-        message: '标签已存在！'
+        message: '标签已存在！',
       };
       return false;
     }
     if (result.data !== null) {
       ctx.body = {
         status: 200,
-        message: '标签添加成功！'
+        message: '标签添加成功！',
       };
     } else {
       ctx.body = {
         status: 201,
-        message: '标签添加失败！' + result.message
+        message: '标签添加失败！' + result.message,
       };
     }
   }

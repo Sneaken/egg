@@ -9,100 +9,105 @@ module.exports = app => {
         type: INTEGER(11),
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       _id: {
         type: STRING(255),
         allowNull: true,
-        unique: true
+        unique: true,
       },
       title: {
         type: STRING(512),
-        allowNull: false
+        allowNull: false,
       },
       subtitle: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       summary: {
         type: TEXT,
-        allowNull: false
+        allowNull: false,
       },
       author: {
         type: JSON,
-        allowNull: false
+        allowNull: false,
       },
       authorIntro: {
         type: TEXT,
-        allowNull: false
+        allowNull: false,
       },
       publisher: {
         type: STRING(255),
-        allowNull: false
+        allowNull: false,
       },
       altTitle: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       originTitle: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       translator: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       pubDate: {
         type: STRING(255),
-        allowNull: false
+        allowNull: false,
       },
       pages: {
         type: INTEGER(11),
-        allowNull: true
+        allowNull: true,
       },
       tags: {
         type: JSON,
-        allowNull: true
+        allowNull: true,
       },
       catalog: {
         type: TEXT,
-        allowNull: false
+        allowNull: false,
       },
       image: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       binding: {
         type: STRING(255),
-        allowNull: true
+        allowNull: true,
       },
       isbn10: {
         type: STRING(10),
-        allowNull: true
+        allowNull: true,
       },
       isbn13: {
         type: STRING(13),
-        allowNull: false
+        allowNull: false,
       },
       price: {
         type: FLOAT,
         allowNull: true,
-        defaultValue: '0.00'
+        defaultValue: '0.00',
       },
       rating: {
         type: JSON,
-        allowNull: false
+        allowNull: false,
       },
       images: {
         type: JSON,
-        allowNull: false
-      }
+        allowNull: false,
+      },
+      inventory: {
+        type: INTEGER(2),
+        allowNull: false,
+        defaultValue: '3',
+      },
     },
     {
       timestamps: false,
       freezeTableName: true,
       underscored: false,
-      tableName: 'book'
+      tableName: 'book',
     }
   );
 };

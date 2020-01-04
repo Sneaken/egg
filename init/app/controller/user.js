@@ -5,26 +5,25 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   // 注册
   async register() {
-    const { ctx, app } = this;
-    //获取用户端传递过来的参数
-    console.log(ctx.request.body);
+    const { ctx } = this;
+    // 获取用户端传递过来的参数
     const result = await ctx.service.user.register(ctx.request.body);
     if (result.isRegister) {
       ctx.body = {
         status: 208,
-        message: '用户名已被注册！'
+        message: '用户名已被注册！',
       };
       return false;
     }
     if (result.data !== null) {
       ctx.body = {
         status: 200,
-        message: '用户注册成功！'
+        message: '用户注册成功！',
       };
     } else {
       ctx.body = {
         status: 201,
-        message: '用户注册失败！' + result.message
+        message: '用户注册失败！' + result.message,
       };
     }
   }
@@ -32,7 +31,7 @@ class UserController extends Controller {
   // 登录
   async login() {
     const { ctx, app } = this;
-    //获取用户端传递过来的参数
+    // 获取用户端传递过来的参数
     const { username, password, verificationCode } = ctx.request.body;
 
     const code = await ctx.service.common.getVerifyCode();
@@ -42,25 +41,25 @@ class UserController extends Controller {
     if (verificationCode && verificationCode.toLowerCase() !== code) {
       ctx.body = {
         status: 204,
-        message: '验证码错误！'
+        message: '验证码错误！',
       };
       return false;
     }
     // 进行验证 data 数据 登录是否成功
     const result = await ctx.service.user.login(username, password);
 
-    //成功过后进行一下操作
+    // 成功过后进行一下操作
     if (!result.isRegister) {
       ctx.body = {
         status: 202,
-        message: '用户尚未注册！'
+        message: '用户尚未注册！',
       };
       return false;
     }
     if (result.data === null) {
       ctx.body = {
         status: 203,
-        message: '密码错误!'
+        message: '密码错误!',
       };
       return false;
     }
@@ -72,14 +71,14 @@ class UserController extends Controller {
         'Bearer ' +
         app.jwt.sign(
           {
-            username: result.data.username, //需要存储的 token 数据
+            username: result.data.username, // 需要存储的 token 数据
             competence: result.data.competence,
             phone: result.data.phone,
-            email: result.data.email
+            email: result.data.email,
           },
           app.config.jwt.secret,
           { expiresIn: 8 * 3600 }
-        ) // 生成 token 的方式
+        ), // 生成 token 的方式
     };
   }
 
@@ -91,19 +90,19 @@ class UserController extends Controller {
     if (!result.isRegister) {
       ctx.body = {
         status: 202,
-        message: '用户尚未注册！'
+        message: '用户尚未注册！',
       };
       return false;
     }
     if (JSON.stringify(result.data) !== '[1]') {
       ctx.body = {
         status: 205,
-        message: '密码修改失败！'
+        message: '密码修改失败！',
       };
     } else {
       ctx.body = {
         status: 200,
-        message: '密码修改成功！'
+        message: '密码修改成功！',
       };
     }
   }
@@ -116,14 +115,14 @@ class UserController extends Controller {
     if (result === null) {
       ctx.body = {
         status: 207,
-        message: '暂无数据！'
+        message: '暂无数据！',
       };
     }
 
     ctx.body = {
       status: 200,
       message: '用户信息查询成功！',
-      data: result
+      data: result,
     };
   }
 
@@ -141,7 +140,7 @@ class UserController extends Controller {
     } else {
       ctx.body = {
         status: 211,
-        message: '参数类型出错'
+        message: '参数类型出错',
       };
       return;
     }
@@ -149,24 +148,24 @@ class UserController extends Controller {
       username,
       attribute,
       oldValue,
-      newValue
+      newValue,
     };
 
     const result = await ctx.service.user.updateUserInfo(params);
     if (result.data[0] === 1) {
       ctx.body = {
         status: 200,
-        message: '用户信息更新成功！'
+        message: '用户信息更新成功！',
       };
     } else if (result.data[0] === 0) {
       ctx.body = {
         status: 212,
-        message: '用户信息修改失败！'
+        message: '用户信息修改失败！',
       };
     } else {
       ctx.body = {
         status: 202,
-        message: '用户尚未注册！'
+        message: '用户尚未注册！',
       };
     }
   }
@@ -178,7 +177,7 @@ class UserController extends Controller {
     if (user === null) {
       ctx.body = {
         status: 202,
-        message: '用户尚未注册！无法获取用户信息！'
+        message: '用户尚未注册！无法获取用户信息！',
       };
     }
     ctx.body = {
@@ -188,14 +187,14 @@ class UserController extends Controller {
         'Bearer ' +
         app.jwt.sign(
           {
-            username: user.username, //需要存储的 token 数据
+            username: user.username, // 需要存储的 token 数据
             competence: user.competence,
             phone: user.phone,
-            email: user.email
+            email: user.email,
           },
           app.config.jwt.secret,
           { expiresIn: 8 * 3600 }
-        ) // 生成 token 的方式
+        ), // 生成 token 的方式
     };
   }
 }

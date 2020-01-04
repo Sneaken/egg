@@ -10,14 +10,14 @@ class CommonService extends Service {
       fontSize: 50,
       width: 90,
       height: 35,
-      background: '#eccc68'
+      background: '#eccc68',
     });
     this.ctx.session.code = captcha.text.toLowerCase();
     return captcha;
   }
 
   async getVerifyCode() {
-    return this.ctx.session.code; //获得session中的验证码
+    return this.ctx.session.code; // 获得session中的验证码
   }
 }
 

@@ -8,15 +8,15 @@ class UserService extends Service {
     const { ctx } = this;
     try {
       const isRegister = await ctx.model.User.findOne({
-        attributes: ['username'],
+        attributes: [ 'username' ],
         where: {
-          username
-        }
+          username,
+        },
       });
       if (isRegister !== null) {
         return {
           isRegister: true,
-          data: null
+          data: null,
         };
       }
       const hashPassword = await ctx.genHash(password);
@@ -28,16 +28,16 @@ class UserService extends Service {
         phone,
         idCard,
         email,
-        competence: '1'
+        competence: '1',
       });
       return {
-        data: result
+        data: result,
       };
     } catch (e) {
       console.log(e);
       return {
         message: e,
-        data: null
+        data: null,
       };
     }
   }
@@ -46,65 +46,65 @@ class UserService extends Service {
   async login(username, password) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({
-      attributes: ['username', 'password'],
+      attributes: [ 'username', 'password' ],
       where: {
-        username
-      }
+        username,
+      },
     });
     if (isRegister === null) {
       return {
         isRegister: false,
-        data: null
+        data: null,
       };
     }
-    const check = await ctx.compare(password, isRegister.password); //密码校验
+    const check = await ctx.compare(password, isRegister.password); // 密码校验
     if (check) {
       return {
         isRegister: true,
         data: await ctx.model.User.findOne({
-          attributes: ['username', 'competence', 'phone', 'email'],
+          attributes: [ 'username', 'competence', 'phone', 'email' ],
           where: {
-            username
-          }
-        })
-      };
-    } else {
-      return {
-        isRegister: true,
-        data: null
+            username,
+          },
+        }),
       };
     }
+    return {
+      isRegister: true,
+      data: null,
+    };
+
   }
 
   // 忘记密码
   async forgetPassword({ username, password }) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({
-      attributes: ['username'],
+      attributes: [ 'username' ],
       where: {
-        username
-      }
+        username,
+      },
     });
     if (isRegister === null) {
       return {
         isRegister: false,
-        data: null
+        data: null,
       };
     }
     const hashPassword = await ctx.genHash(password);
     const result = await ctx.model.User.update(
       {
-        password: hashPassword
+        password: hashPassword,
       },
       {
         where: {
-          username
-        }
+          username,
+        },
       }
     );
     return {
       isRegister: true,
-      data: result
+      data: result,
     };
   }
 
@@ -112,10 +112,10 @@ class UserService extends Service {
   async getInfo({ username }) {
     const { ctx } = this;
     return await ctx.model.User.findOne({
-      attributes: { exclude: ['id', 'password', 'competence'] },
+      attributes: { exclude: [ 'id', 'password', 'competence' ] },
       where: {
-        username
-      }
+        username,
+      },
     });
   }
 
@@ -123,10 +123,10 @@ class UserService extends Service {
   async isExists(username) {
     const { ctx } = this;
     const isRegister = await ctx.model.User.findOne({
-      attributes: ['username', 'password'],
+      attributes: [ 'username', 'password' ],
       where: {
-        username
-      }
+        username,
+      },
     });
     return isRegister !== null;
   }
@@ -139,51 +139,51 @@ class UserService extends Service {
         try {
           const result = await ctx.model.User.update(
             {
-              [attribute]: newValue
+              [attribute]: newValue,
             },
             {
               where: {
                 username,
-                [attribute]: oldValue
-              }
+                [attribute]: oldValue,
+              },
             }
           );
           return {
-            data: result
+            data: result,
           };
         } catch (e) {
           console.log(e);
         }
       } else {
-        const check = await ctx.compare(oldValue, isExists.password); //密码校验
+        const check = await ctx.compare(oldValue, isExists.password); // 密码校验
         if (check) {
           try {
             const result = await ctx.model.User.update(
               {
-                [attribute]: newValue
+                [attribute]: newValue,
               },
               {
                 where: {
                   username,
-                  [attribute]: oldValue
-                }
+                  [attribute]: oldValue,
+                },
               }
             );
             return {
-              data: result
+              data: result,
             };
           } catch (e) {
             console.log(e);
           }
         } else {
           return {
-            data: [0]
+            data: [ 0 ],
           };
         }
       }
     } else {
       return {
-        data: null
+        data: null,
       };
     }
   }

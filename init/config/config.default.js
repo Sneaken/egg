@@ -30,20 +30,30 @@ module.exports = appInfo => {
     port: 3306,
     username: 'root',
     password: '924393527',
-    timezone: '+08:00'
+    timezone: '+08:00',
+    dialectOptions: {
+      dateStrings: true,
+      typeCast(field, next) {
+        // for reading from database
+        if (field.type === 'DATETIME') {
+          return field.string();
+        }
+        return next();
+      },
+    },
   };
 
   config.security = {
-    domainWhiteList: ['127.0.0.1:8080'], //允许访问接口的白名单
+    domainWhiteList: [ '127.0.0.1:8080' ], // 允许访问接口的白名单
     csrf: {
-      enable: false
-    }
+      enable: false,
+    },
   };
 
   config.cors = {
     // origin: '*',
     credentials: true,
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
   };
 
   config.jwt = {
@@ -53,16 +63,16 @@ module.exports = appInfo => {
       '/api/user/login',
       '/api/verify',
       '/api/user/register',
-      '/api/user/forgetPassword'
-    ]
+      '/api/user/forgetPassword',
+    ],
   };
 
   config.bcrypt = {
-    saltRounds: 10 // default 10
+    saltRounds: 10, // default 10
   };
 
   return {
     ...config,
-    ...userConfig
+    ...userConfig,
   };
 };

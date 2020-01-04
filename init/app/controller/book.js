@@ -10,7 +10,7 @@ class BookController extends Controller {
 
   /**
    * 通过分类 简单查询 列表展示
-   * @returns {Promise<boolean>}
+   * @return {Promise<boolean>} 书籍列表
    */
   async findSimpleByKeywords() {
     const { ctx } = this;
@@ -18,7 +18,7 @@ class BookController extends Controller {
     if (category === '' || keywords === '') {
       ctx.body = {
         status: 206,
-        message: '检查查询参数,不能为空！'
+        message: '检查查询参数,不能为空！',
       };
       return false;
     }
@@ -26,12 +26,12 @@ class BookController extends Controller {
     if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
-        message: '查询成功！'
+        message: '查询成功！',
       });
     } else {
       ctx.body = Object.assign(result, {
         status: 207,
-        message: '暂无数据！'
+        message: '暂无数据！',
       });
     }
   }
@@ -42,7 +42,7 @@ class BookController extends Controller {
     if (_id === '') {
       ctx.body = {
         status: 206,
-        message: '检查查询参数,不能为空！'
+        message: '检查查询参数,不能为空！',
       };
       return false;
     }
@@ -50,12 +50,12 @@ class BookController extends Controller {
     if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
-        message: '查询成功！'
+        message: '查询成功！',
       });
     } else {
       ctx.body = Object.assign(result, {
         status: 207,
-        message: '暂无数据！'
+        message: '暂无数据！',
       });
     }
   }
@@ -66,12 +66,12 @@ class BookController extends Controller {
     if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
-        message: '查询成功！'
+        message: '查询成功！',
       });
     } else {
       ctx.body = Object.assign(result, {
         status: 207,
-        message: '暂无数据！'
+        message: '暂无数据！',
       });
     }
   }
@@ -81,12 +81,52 @@ class BookController extends Controller {
     if (result.data.length !== 0) {
       ctx.body = Object.assign(result, {
         status: 200,
-        message: '查询成功！'
+        message: '查询成功！',
       });
     } else {
       ctx.body = Object.assign(result, {
         status: 207,
-        message: '暂无数据！'
+        message: '暂无数据！',
+      });
+    }
+  }
+
+  /**
+   * 典藏地查询
+   */
+  async getLocation() {
+    const { ctx } = this;
+    const { _id } = ctx.query;
+    const result = await ctx.service.book.getLocation(_id);
+    if (result.data.length !== 0) {
+      ctx.body = Object.assign(result, {
+        status: 200,
+        message: '查询成功！',
+      });
+    } else {
+      ctx.body = Object.assign(result, {
+        status: 207,
+        message: '暂无数据！',
+      });
+    }
+  }
+
+  /**
+   * 预约信息
+   */
+  async getBookingInfo() {
+    const { ctx } = this;
+    const { _id } = ctx.query;
+    const result = await ctx.service.book.getBookingInfo(_id);
+    if (result.data.length !== 0) {
+      ctx.body = Object.assign(result, {
+        status: 200,
+        message: '查询成功！',
+      });
+    } else {
+      ctx.body = Object.assign(result, {
+        status: 207,
+        message: '暂无数据！',
       });
     }
   }
