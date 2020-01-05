@@ -187,6 +187,17 @@ class UserService extends Service {
       };
     }
   }
+
+  async getUserId(phone) {
+    const { ctx } = this;
+    const { id } = await ctx.model.User.findOne({
+      attributes: [ 'id' ],
+      where: {
+        phone,
+      },
+    });
+    return id;
+  }
 }
 
 module.exports = UserService;

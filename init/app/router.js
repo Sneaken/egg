@@ -14,6 +14,8 @@ module.exports = app => {
   router.get('/api/book/getLocation', controller.book.getLocation);
   router.get('/api/book/getBookingInfo', controller.book.getBookingInfo);
   router.post('/api/bookBooking/bookReservation', controller.bookBooking.bookReservation);
+  router.get('/api/bookBooking/bookingHistory', controller.bookBooking.bookingHistory);
+  router.post('/api/bookBooking/cancelBooking', controller.bookBooking.cancelBooking);
   router.get('/api/user/getUserInfo', controller.user.getUserInfo);
   router.get('/api/tag/create', controller.tag.createTag);
   router.get('/api/user/getToken', controller.user.getToken);

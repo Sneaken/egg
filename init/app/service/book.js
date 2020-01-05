@@ -118,6 +118,16 @@ class BookService extends Service {
       data: result,
     };
   }
+  async getTitle(_id) {
+    const { ctx } = this;
+    const result = await ctx.model.Book.findAll({
+      attributes: [ 'title' ],
+      where: {
+        _id,
+      },
+    });
+    return result[0].title;
+  }
 }
 
 module.exports = BookService;
