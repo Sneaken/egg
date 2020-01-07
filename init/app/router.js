@@ -23,4 +23,5 @@ module.exports = app => {
   router.post('/api/user/register', controller.user.register);
   router.post('/api/user/forgetPassword', controller.user.forgetPassword);
   router.post('/api/user/updateUserInfo', controller.user.updateUserInfo);
+  router.post('/api/user/borrowBook', controller.user.borrowBooks);
 };

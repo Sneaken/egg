@@ -7,10 +7,10 @@ class BookBookingService extends Service {
     const { app, ctx } = this;
     const data = {};
     const result = await ctx.model.BookStorage.findOne({
-      attributes: ['reservation'],
+      attributes: [ 'reservation' ],
       where: {
-        label
-      }
+        label,
+      },
     });
     if (result.reservation === '1') {
       // 预约
@@ -26,22 +26,22 @@ class BookBookingService extends Service {
       let transaction;
       try {
         const { id } = await ctx.model.User.findOne({
-          attributes: ['id'],
+          attributes: [ 'id' ],
           where: {
-            phone
-          }
+            phone,
+          },
         });
         transaction = await ctx.model.transaction(async t => {
           await ctx.model.BookStorage.update(
             {
               reservation: '1',
-              booking_person: id
+              booking_person: id,
             },
             {
               where: {
-                label
+                label,
               },
-              transaction: t
+              transaction: t,
             }
           );
         });
@@ -51,10 +51,10 @@ class BookBookingService extends Service {
             label,
             user_id: id,
             start_time: startTime,
-            end_time: startTime + 7 * 24 * 3600 * 1000
+            end_time: startTime + 7 * 24 * 3600 * 1000,
           },
           {
-            transaction
+            transaction,
           }
         );
         // await transaction.commit();
@@ -75,7 +75,7 @@ class BookBookingService extends Service {
     WHERE a.user_id = '${id}' 
     ORDER BY a.id`;
     const result = await app.model.query(sql, {
-      type: sequelize.QueryTypes.SELECT
+      type: sequelize.QueryTypes.SELECT,
     });
 
     if (result.length > 0) {
@@ -86,7 +86,7 @@ class BookBookingService extends Service {
         );
         data.data[i] = {
           title,
-          ...result[i]
+          ...result[i],
         };
       }
     }
@@ -97,10 +97,10 @@ class BookBookingService extends Service {
     const { ctx } = this;
     const data = {};
     const result = await ctx.model.BookStorage.findOne({
-      attributes: ['reservation', 'booking_person'],
+      attributes: [ 'reservation', 'booking_person' ],
       where: {
-        label
-      }
+        label,
+      },
     });
     const userId = await ctx.service.user.getUserId(phone);
     if (result.reservation === '1') {
@@ -112,28 +112,32 @@ class BookBookingService extends Service {
             await ctx.model.BookStorage.update(
               {
                 reservation: '0',
-                booking_person: null
+                booking_person: null,
               },
               {
                 where: {
                   label,
-                  booking_person: userId
+                  booking_person: userId,
                 },
-                transaction: t
+                transaction: t,
               }
             );
           });
           data.data = await ctx.model.BookBooking.destroy({
             where: {
               label,
-              user_id: userId
+              user_id: userId,
             },
-            transaction
+            transaction,
           });
           // await transaction.commit();
         } catch (err) {
           // 事务已被回滚
           ctx.logger.error(err);
+          return {
+            status: 220,
+            message: '操作失败，请重试!',
+          };
           // await transaction.rollback();
         }
       }

@@ -53,9 +53,9 @@ module.exports = app => {
         defaultValue: 5,
       },
       status: {
-        type: INTEGER(1),
+        type: ENUM('0', '1'),
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: '0',
       },
     },
     {

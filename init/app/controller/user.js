@@ -197,6 +197,21 @@ class UserController extends Controller {
         ), // 生成 token 的方式
     };
   }
+
+  async borrowBooks() {
+    const { ctx } = this;
+    const { phone, label } = ctx.request.body;
+    const result = await ctx.service.user.borrowBooks(phone, label);
+    console.log(result);
+    if (result.data && result.data[0] === 1) {
+      ctx.body = {
+        status: 200,
+        message: '操作成功！',
+      };
+    } else {
+      ctx.body = result;
+    }
+  }
 }
 
 module.exports = UserController;
