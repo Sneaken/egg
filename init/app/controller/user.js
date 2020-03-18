@@ -111,7 +111,6 @@ class UserController extends Controller {
   async getUserInfo() {
     const { ctx } = this;
     const result = await ctx.service.user.getInfo(ctx.query);
-    console.log(result);
     if (result === null) {
       ctx.body = {
         status: 207,
@@ -198,15 +197,31 @@ class UserController extends Controller {
     };
   }
 
+  // 借书
   async borrowBooks() {
     const { ctx } = this;
     const { phone, label } = ctx.request.body;
     const result = await ctx.service.user.borrowBooks(phone, label);
-    console.log(result);
     if (result.data && result.data[0] === 1) {
       ctx.body = {
         status: 200,
         message: '操作成功！',
+      };
+    } else {
+      ctx.body = result;
+    }
+  }
+
+  // 查询借阅历史
+  async borrowedHistory() {
+    const { ctx } = this;
+    const { phone } = ctx.request.query;
+    const result = await ctx.service.user.borrowBooks(phone);
+    console.log(result);
+    if (result.data && result.data[0] === 1) {
+      ctx.body = {
+        status: 200,
+        message: '查询成功！',
       };
     } else {
       ctx.body = result;
